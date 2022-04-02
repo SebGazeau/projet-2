@@ -109,7 +109,7 @@ contract('Voting', accounts => {
 			it('should not register the same voter, revert', async () => {
 				await expectRevert(VotingInstance.addVoter(account.firstVoter, {from: account.owner}), 'Already registered');
 			});
-			it('should not register voter in wrong worflow, revert', async () => {
+			it('should not register voter in wrong workflow, revert', async () => {
 				await VotingInstance.startProposalsRegistering({from: account.owner});
 				await expectRevert(VotingInstance.addVoter(account.notRegistered, {from: account.owner}), 'Voters registration is not open yet');
 			});
