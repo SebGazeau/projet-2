@@ -16,7 +16,7 @@ contract('Voting', accounts => {
 	let tally;
 
 	describe('Global elements', () => {
-		describe.skip('Workflow Status', () =>{
+		describe('Workflow Status', () =>{
 			before(async () => {
 				VotingInstance = await Voting.new({from: account.owner});
 			});
@@ -70,7 +70,7 @@ contract('Voting', accounts => {
 				});
 			});
 		});
-		describe('safe actions', () => {
+		describe('Safe Actions', () => {
 			before(async () => {
 				VotingInstance = await Voting.new({from: account.owner});
 			});
@@ -109,7 +109,7 @@ contract('Voting', accounts => {
 			it('should not register the same voter, revert', async () => {
 				await expectRevert(VotingInstance.addVoter(account.firstVoter, {from: account.owner}), 'Already registered');
 			});
-			it('Should not register voter in wrong worflow, revert', async () => {
+			it('should not register voter in wrong worflow, revert', async () => {
 				await VotingInstance.startProposalsRegistering({from: account.owner});
 				await expectRevert(VotingInstance.addVoter(account.notRegistered, {from: account.owner}), 'Voters registration is not open yet');
 			});
@@ -134,7 +134,7 @@ contract('Voting', accounts => {
 			it('should not store empty proposal, revert', async () => {
 				await expectRevert(VotingInstance.addProposal("", {from: account.firstVoter}), 'Vous ne pouvez pas ne rien proposer');
 			});
-			it('Should not store proposal in wrong workflow, revert', async () => {
+			it('should not store proposal in wrong workflow, revert', async () => {
 				await VotingInstance.endProposalsRegistering({from: account.owner});
 				await expectRevert(VotingInstance.addProposal('Proposal One', {from: account.firstVoter}), 'Proposals are not allowed yet');
 			});
@@ -162,7 +162,7 @@ contract('Voting', accounts => {
 			it('should not allow a voter to vote twice, revert', async () => {
 				await expectRevert(VotingInstance.setVote(new BN(1), {from: account.firstVoter}), 'You have already voted');
 			});
-			it('Should not record a vote in wrong workflow, revert', async () => {
+			it('should not record a vote in wrong workflow, revert', async () => {
 				await VotingInstance.endVotingSession({from: account.owner});
 				await expectRevert(VotingInstance.setVote(new BN(1), {from: account.firstVoter}), 'Voting session havent started yet');
 			});
@@ -188,7 +188,7 @@ contract('Voting', accounts => {
 			it('get event workflow status change automatic', () =>{
 				expectEvent(tally, 'WorkflowStatusChange', {previousStatus: new BN(4), newStatus: new BN(5)});
 			});
-			it('Should not record tally votes in wrong workflow, revert', async () => {
+			it('should not record tally votes in wrong workflow, revert', async () => {
 				await expectRevert(VotingInstance.tallyVotes({from: account.owner}), 'Current status is not voting session ended');
 			});
 		});
