@@ -2,7 +2,7 @@
 
 ## Unit tests
 #### 35 tests valides 
-Toutes les fonctions du contrat sont testées
+Une majorité des fonctions du contrat sont testées
 
 1 file : VotingTest.js
 
