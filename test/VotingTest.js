@@ -9,12 +9,8 @@ contract('Voting', accounts => {
 		thirdVoter: accounts[3],
 		notRegistered: accounts[4]
 	}
-	let VotingInstance;
-	let voter;
-	let proposal;
-	let vote;
-	let tally;
-
+	let VotingInstance, voter, proposal, vote, tally;
+	
 	describe('Global elements', () => {
 		describe('Workflow Status', () =>{
 			before(async () => {
@@ -76,18 +72,18 @@ contract('Voting', accounts => {
 			});
 			context('only owner', () => {
 				it('can register a voter, revert',async () => {
-					await expectRevert.unspecified(VotingInstance.addVoter(account.secondVoter, {from: account.firstVoter}));
+					await expectRevert(VotingInstance.addVoter(account.secondVoter, {from: account.firstVoter}), 'Ownable: caller is not the owner');
 				});
 			});
 			context('only registered voters' , () => {
 				it('can add a proposal, revert',async () => {
 					await VotingInstance.startProposalsRegistering({from: account.owner});
-					await expectRevert.unspecified(VotingInstance.addProposal('Proposal One', {from: account.notRegistered}));
+					await expectRevert(VotingInstance.addProposal('Proposal One', {from: account.notRegistered}), 'You\'re not a voter');
 				});
 				it('can add a vote, revert',async () => {
 					await VotingInstance.endProposalsRegistering({from: account.owner});
 					await VotingInstance.startVotingSession({from: account.owner});
-					await expectRevert.unspecified(VotingInstance.setVote(new BN(0), {from: account.notRegistered}));
+					await expectRevert(VotingInstance.setVote(new BN(0), {from: account.notRegistered}), 'You\'re not a voter');
 				});
 			});
 		});
